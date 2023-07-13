@@ -1,13 +1,24 @@
 import axios from 'axios';
-import { Pokemon } from 'pokenode-ts';
+import { NamedAPIResourceList, Pokemon } from 'pokenode-ts';
 
 // TODO make dynamic per environment in app-config
-const API_BASE: string = 'https://pokeapi.co/api/v2';
+export const POKE_API_BASE: string = 'https://pokeapi.co/api/v2';
 
 export const getPokemonRequest = async (
     idOrName: number | string
 ): Promise<Pokemon> => {
-    const url = `${API_BASE}/pokemon/${idOrName}`;
+    const url = `${POKE_API_BASE}/pokemon/${idOrName}`;
+
+    const { data } = await axios.get(url);
+
+    return data;
+};
+
+export const getPokemonListRequest = async (
+    offset: number
+): Promise<NamedAPIResourceList> => {
+    const limit: number = 20;
+    const url = `${POKE_API_BASE}/pokemon/?offset=${offset}&limit=${limit}`;
 
     const { data } = await axios.get(url);
 

@@ -4,13 +4,13 @@ import { Router } from '@reach/router';
 
 import { store } from './global/sagaStore';
 
-const PokedexHome = lazy(() => import('./components/Pokedex'));
+const PokemonMain = lazy(() => import('./components/Pokedex'));
 
 function App() {
   return (
     <Provider store={store}>
       <Router basepath='/'>
-        <PokedexHome default />
+        <PokemonMain default />
       </Router>
     </Provider>
   );

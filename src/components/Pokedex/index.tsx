@@ -1,92 +1,114 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { RouteComponentProps } from "@reach/router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { getPokemonAction } from "../../actions/pokeActions";
-import { Pokemon } from "pokenode-ts";
+import { getPokemonAction, resetPokemonDataAction } from "../../actions/pokeActions";
+import { NamedAPIResource, NamedAPIResourceList, Pokemon } from "pokenode-ts";
+import PokemonCard from "./PokemonCard";
+import { Button, IconButton, InputBase, Paper, TextField } from "@mui/material";
+import { Box } from "@mui/system";
+import { POKE_API_BASE } from "../../api/pokeApi";
+import axios from "axios";
 
-interface PokemonHomeProps extends RouteComponentProps {
-    getPokemon?: typeof getPokemonAction;
-    pokemon?: Pokemon;
+interface PokemonMainProps extends RouteComponentProps {
+    getPokemon: typeof getPokemonAction;
+    pokemonData: Pokemon[];
+    resetPokemonData: typeof resetPokemonDataAction;
 };
 
-// TODO make this configurable by browser and user
-const language: string = 'en';
-
-const PokemonHome = ({
+const PokemonMain = ({
     getPokemon,
-    pokemon
-}: PokemonHomeProps)  => {
+    pokemonData,
+    resetPokemonData
+}: PokemonMainProps)  => {
+    const [pokemonInput, setPokemonInput] = useState<string>('');
 
     useEffect(() => {
-        if (getPokemon) {
-            getPokemon(3); // default to the first
-        }
+        getDefaultPokemonData();
     }, []);
 
+    const getDefaultPokemonData = async () => {
+        resetPokemonData();
+        const { data } = await axios.get(`${POKE_API_BASE}/pokemon/`);
+
+        getPokemonDataWithResources(data);
+    };
+
+    const getPokemonDataWithResources = (data: NamedAPIResourceList) => {
+        data.results.map((result) => {
+            getPokemon(result.name);
+        });
+    };
+
+    const searchForPokemon = async () => {
+        resetPokemonData();
+        
+        if (pokemonInput && pokemonInput.length) {
+            getPokemon(pokemonInput);
+        } else {
+            // TODO display error message/state
+        }
+    };
+
     return (
-        <>
-            { pokemon && <>
-                <h3>
-                    { pokemon.name }
-                    <span>#{ pokemon.id }</span>
-                </h3>
-                {pokemon.sprites.front_default && <img src={pokemon.sprites.front_default} />}
+        <div className="pokemon-main">
+            <div className="pokemon-main__search">
+                <Box
+                    component="form"
+                    sx={{
+                        '& .MuiTextField-root': { m: 1, width: '25ch' },
+                    }}
+                    noValidate
+                    autoComplete="off"
+                    >
+                    <TextField 
+                        className="pokemon-main__search-input" 
+                        label="Enter Pokémon name or ID" 
+                        onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setPokemonInput(event.target.value); }}
+                        onKeyPress={(ev) => {
+                            if (ev.key === 'Enter') {
+                                searchForPokemon()
+                                ev.preventDefault();
+                            }
+                        }}
+                        size="small" 
+                        type="search" 
+                    />
+                    <Button onClick={() => { searchForPokemon() }} size="large" variant="outlined">Search</Button>
+                </Box>
+                
 
-                <div className="base-info">
-                    <p>Species</p>
-                    <p>{pokemon.species.name}</p>
-                    <p>Base Experience</p>
-                    <p>{pokemon.base_experience}</p>
-                    <p>Height</p>
-                    <p>{pokemon.height} decimetres</p>
-                    <p>Weight</p>
-                    <p>{pokemon.weight} hectograms</p>
-                    <p>Abilities</p>
-                    { pokemon.abilities.map((ability) => {
+            </div>
+            
+            { pokemonData && <div className="pokemon-list">
+
+                <div className="pokemon-list__cards">
+                    { pokemonData.map((pokemon: Pokemon) => {
                         return (
-                            <span>{ability.ability.name}</span>
+                            <PokemonCard key={pokemon.name} pokemon={pokemon} />
                         );
                     })}
                 </div>
-
-                <h4>Type</h4>
-                { pokemon.types.map((type) => {
-                    return (
-                        <p>{type.type.name}</p>
-                    );
-                })}
-
-                <div className="stats">
-                    <h4>Stats</h4>
-                    { pokemon.stats.map((stat) => {
-                        return (
-                            <>
-                                <p>{stat.stat.name}</p>
-                                <p>{stat.base_stat}</p>
-                            </>
-                        );
-                    })}
-                </div>
-            </>}
-        </> 
+            </div>}
+        </div> 
     );
 };
 
 const mapStateToProps = (state: any) => {
     const {
-        poke: { pokemon }
+        poke: { pokemonData }
     } = state;
 
     return {
-        pokemon
+        pokemonData
     };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        getPokemon: bindActionCreators(getPokemonAction, dispatch)
+        getPokemon: bindActionCreators(getPokemonAction, dispatch),
+        resetPokemonData: bindActionCreators(resetPokemonDataAction, dispatch)
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PokemonHome);
+export default connect(mapStateToProps, mapDispatchToProps)(PokemonMain);

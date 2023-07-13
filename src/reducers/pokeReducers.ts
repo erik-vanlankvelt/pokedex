@@ -1,20 +1,16 @@
 import { pokeActionTypes } from '../constants/pokeActionTypes';
 import { PokeReducerActions } from '../actions/pokeActions';
 
-export const pokeInitialState = {
-    pokedex: {}
-} as const;
-
-const pokeReducer = (state = pokeInitialState, action: PokeReducerActions) => {
+const reducer = (state = {}, action: PokeReducerActions) => {
     switch (action.type) {
-        case pokeActionTypes.STORE_POKEDEXES:
+        case pokeActionTypes.STORE_POKEMON:
             return {
                 ...state,
-                pokedex: action.pokedex
+                pokemon: action.pokemon
             };
         default:
             return state;
     }
 };
 
-export default pokeReducer;
+export default reducer;

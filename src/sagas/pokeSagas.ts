@@ -1,22 +1,23 @@
-import { Pokedex } from "pokenode-ts"
+import { Pokemon } from "pokenode-ts"
 import { call, put, takeLatest } from 'redux-saga/effects'
-import { storePokedexesAction } from "../actions/pokeActions";
-import { getPokedexesRequest } from "../api/pokeApi"
+import { GetPokemonReturnType, storePokemonAction } from "../actions/pokeActions";
+import { getPokemonRequest } from "../api/pokeApi"
 import { pokeActionTypes } from "../constants/pokeActionTypes";
 
-export function* getPokedexesSaga(idOrName: any) {
+export function* getPokemonSaga(action: GetPokemonReturnType) {
     // TODO invoke some sort of loading action
 
     try {
-        const pokedex: Pokedex = yield call(getPokedexesRequest, idOrName);
-        yield put(storePokedexesAction(pokedex));
+        const { idOrName } = action;
+        const pokemon: Pokemon = yield call(getPokemonRequest, idOrName);
+        yield put(storePokemonAction(pokemon));
     } catch (error) {
-        console.error('Error trying to get Pokedex', error);
+        console.error('Error trying to get Pokemon', error);
         // TODO invoke action to display error message
     }
     // TODO invoke hide loading action
 }
 
-export function* watchGetPokedexes() {
-    yield takeLatest(pokeActionTypes.GET_POKEDEXES, getPokedexesSaga);
+export function* watchGetPokemon() {
+    yield takeLatest(pokeActionTypes.GET_POKEMON, getPokemonSaga);
 }

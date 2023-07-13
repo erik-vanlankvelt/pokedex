@@ -1,24 +1,24 @@
-import { Pokedex } from "pokenode-ts";
+import { Pokemon } from "pokenode-ts";
 import { pokeActionTypes } from "../constants/pokeActionTypes";
 
-export const getPokedexesAction = (idOrName: number | string) => {
+export const getPokemonAction = (idOrName: number | string) => {
     return {
-        type: pokeActionTypes.GET_POKEDEXES,
+        type: pokeActionTypes.GET_POKEMON,
         idOrName
     };
 }
 
-export type GetPokedexesReturnType = ReturnType<typeof getPokedexesAction>;
+export type GetPokemonReturnType = ReturnType<typeof getPokemonAction>;
 
-export const storePokedexesAction = (pokedex: Pokedex) => {
+export const storePokemonAction = (pokemon: Pokemon) => {
     return {
-        type: pokeActionTypes.STORE_POKEDEXES,
-        pokedex
+        type: pokeActionTypes.STORE_POKEMON,
+        pokemon
     };
 }
 
-export type StorePokedexesReturnType = ReturnType<typeof storePokedexesAction>;
+export type StorePokemonReturnType = ReturnType<typeof storePokemonAction>;
 
 export type PokeReducerActions = 
-    | GetPokedexesReturnType
-    | StorePokedexesReturnType;
+    | GetPokemonReturnType
+    | StorePokemonReturnType;

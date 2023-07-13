@@ -1,4 +1,4 @@
 export const pokeActionTypes = {
-    GET_POKEDEXES: 'GET_POKEDEXES',
-    STORE_POKEDEXES: 'STORE_POKEDEXES'
+    GET_POKEMON: 'GET_POKEMON',
+    STORE_POKEMON: 'STORE_POKEMON'
 } as const;

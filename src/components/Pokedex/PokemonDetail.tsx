@@ -25,7 +25,7 @@ const PokemonDetail = ({
         <>
             { pokemon && <>
                 <h3>
-                    { pokemon.name }
+                    { pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1) }
                     <span>#{ pokemon.id }</span>
                 </h3>
                 {pokemon.sprites.front_default && <img src={pokemon.sprites.front_default} />}

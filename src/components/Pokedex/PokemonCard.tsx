@@ -1,25 +1,29 @@
-import { Avatar } from "@mui/material";
+import { Avatar, Card, CardHeader } from "@mui/material";
 import { RouteComponentProps } from "@reach/router";
 import { Pokemon } from "pokenode-ts";
 
 interface PokemonCardProps extends RouteComponentProps {
-    key: string;
     pokemon: Pokemon;
 };
 
 const PokemonCard = ({ 
-    key,
     pokemon,
  }: PokemonCardProps)  => {
 
     return (
-        <div className="pokemon-card" key={key}>
+        <Card className="pokemon-card">
             { pokemon && <>
-                {pokemon.sprites.front_default && <Avatar alt={ pokemon.name } src={ pokemon.sprites.front_default } sx={{ width: 56, height: 56 }} />}
-                <span>#{ pokemon.id }</span>
-                <h3 className="pokemon-card__name">{ pokemon.name }</h3>
+                <CardHeader 
+                    avatar={
+                        <Avatar alt={ pokemon.name } sx={{ width: 56, height: 56 }}>
+                            <img alt={ pokemon.name } src={ pokemon.sprites.front_default ? pokemon.sprites.front_default : "" } />
+                        </Avatar>
+                    }
+                    title={ pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1) }
+                    subheader={`#${ pokemon.id }`}
+                />
             </>}
-        </div> 
+        </Card> 
     );
 };
 

@@ -137,7 +137,7 @@ const PokemonMain = ({
                 <Grid item xs={3}>
                     { searchHistory && searchHistory.length > 0 && <div className="pokemon-search-history">
                         <h3 className="pokemon-search-history__heading">Search History</h3>
-                        <Stack direction="column" spacing={1}>
+                        <Stack direction="column-reverse" spacing={1}>
                             { searchHistory.map((searchItem: string) => {
                                 return (
                                     <Chip 

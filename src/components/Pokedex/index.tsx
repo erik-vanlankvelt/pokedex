@@ -3,12 +3,13 @@ import { RouteComponentProps } from "@reach/router";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getPokemonAction, resetPokemonDataAction } from "../../actions/pokeActions";
-import { NamedAPIResourceList, Pokemon } from "pokenode-ts";
+import { NamedAPIResource, NamedAPIResourceList, Pokemon } from "pokenode-ts";
 import PokemonCard from "./PokemonCard";
-import { AppBar, Button, Chip, Container, Grid, Link, Stack, TextField, Toolbar } from "@mui/material";
+import { AppBar, Button, Chip, Container, Grid, Stack, TextField, Toolbar } from "@mui/material";
 import { POKE_API_BASE } from "../../api/pokeApi";
 import axios from "axios";
 import { AppBarStyles, ContainerStyles, MainPageStyles, SearchBarStyles, ToolbarStyles } from "../../constants/pokeStyles";
+import PokemonDetail from "./PokemonDetail";
 const logoUrl = require(`../../images/pokedex-logo.png`);
 
 interface PokemonMainProps extends RouteComponentProps {
@@ -22,6 +23,8 @@ const PokemonMain = ({
     pokemonData,
     resetPokemonData
 }: PokemonMainProps)  => {
+    const [displayPokemonDetails, setDisplayPokemonDetails] = useState<boolean>(false);
+    const [pokemonDetails, setPokemonDetails] = useState<Pokemon>();
     const [pokemonInput, setPokemonInput] = useState<string>(''); // Value in search input
     const [searchHistory, setSearchHistory] = useState<string[]>([]); // Saved previous searches
 
@@ -46,29 +49,37 @@ const PokemonMain = ({
         if (searchHistory && searchHistory.length > 0) {
             window.localStorage.setItem(pokemonSearchHistory, JSON.stringify(searchHistory));
         }
-    }, [searchHistory])
+    }, [searchHistory]);
+
+    const selectPokemon = (pokemon: Pokemon) => {
+        setPokemonDetails(pokemon);
+        setDisplayPokemonDetails(true);
+    };
 
     const getDefaultPokemonData = async (signal?: AbortSignal) => {
         resetPokemonData();
+        setDisplayPokemonDetails(false);
 
         try {
-            const { data } = await axios.get(`${POKE_API_BASE}/pokemon/`, { signal: signal });
-            // Format returned is not of type Pokemon[]
-            getPokemonDataWithResources(data);
+            const resp = await axios.get(`${POKE_API_BASE}/pokemon/`, { signal: signal });
+            const pokemonResourceList: NamedAPIResourceList = resp.data;
+   
+            getPokemonDataWithResources(pokemonResourceList.results);
         } catch (error) {
             console.error('Error getting Pokemon Resource List', error);
             // TODO display error message/state
         }
     };
 
-    const getPokemonDataWithResources = (data: NamedAPIResourceList) => {
-        data.results.map((result) => {
+    const getPokemonDataWithResources = (results: NamedAPIResource[]) => {
+        results.map((result: NamedAPIResource) => {
             getPokemon(result.name);
         });
     };
 
     const searchForPokemon = (input?: string) => {
         resetPokemonData();
+        setDisplayPokemonDetails(false);
 
         // Handles passed in value if pokemonInput state hasn't updated
         if (input && input.length > 0) {
@@ -123,11 +134,16 @@ const PokemonMain = ({
                             />
                             <Button onClick={() => { searchForPokemon() }} size="medium" variant="contained">Search</Button>
                         </Stack>
+                        { displayPokemonDetails && pokemonDetails && <PokemonDetail pokemon={pokemonDetails} />}
                         <Grid className="pokemon-list__cards" container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
-                            { pokemonData.sort((a, b) => a.id - b.id).map((pokemon: Pokemon) => {
+                            { pokemonData.sort((a, b) => a.id - b.id).map((pokemon: Pokemon, i: number) => {
                                 return (
                                     <Grid item xs={4} sm={4} md={4} key={pokemon.name}>
-                                        <PokemonCard key={pokemon.name} pokemon={pokemon} />
+                                        <PokemonCard 
+                                            key={`${pokemon.name}_${i}`} 
+                                            onClick={() => selectPokemon(pokemon)}  
+                                            pokemon={pokemon} 
+                                        />
                                     </Grid>
                                 );
                             })}

@@ -3,15 +3,17 @@ import { RouteComponentProps } from "@reach/router";
 import { Pokemon } from "pokenode-ts";
 
 interface PokemonCardProps extends RouteComponentProps {
+    onClick: () => void;
     pokemon: Pokemon;
 };
 
-const PokemonCard = ({ 
+const PokemonCard = ({
+    onClick,
     pokemon,
  }: PokemonCardProps)  => {
 
     return (
-        <Card className="pokemon-card">
+        <Card className="pokemon-card" onClick={onClick}>
             { pokemon && <>
                 <CardHeader 
                     avatar={

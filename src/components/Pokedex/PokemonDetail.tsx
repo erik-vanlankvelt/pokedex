@@ -4,86 +4,68 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import { getPokemonAction } from "../../actions/pokeActions";
 import { Pokemon } from "pokenode-ts";
+import { Box, Card, CardContent, CardMedia, Chip, List, ListItem, Typography } from "@mui/material";
+import ScaledBar from "../common/ScaledBar";
 
 interface PokemonDetailProps extends RouteComponentProps {
-    getPokemon: typeof getPokemonAction;
     pokemon?: Pokemon;
 };
 
 const PokemonDetail = ({
-    getPokemon,
     pokemon
 }: PokemonDetailProps)  => {
 
-    useEffect(() => {
-        if (getPokemon) {
-            getPokemon(3); // default to the first
-        }
-    }, []);
-
     return (
         <>
-            { pokemon && <>
-                <h3>
-                    { pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1) }
-                    <span>#{ pokemon.id }</span>
-                </h3>
-                {pokemon.sprites.front_default && <img src={pokemon.sprites.front_default} />}
-
-                <div className="base-info">
-                    <p>Species</p>
-                    <p>{pokemon.species.name}</p>
-                    <p>Base Experience</p>
-                    <p>{pokemon.base_experience}</p>
-                    <p>Height</p>
-                    <p>{pokemon.height} decimetres</p>
-                    <p>Weight</p>
-                    <p>{pokemon.weight} hectograms</p>
-                    <p>Abilities</p>
-                    { pokemon.abilities.map((ability) => {
-                        return (
-                            <span>{ability.ability.name}</span>
-                        );
-                    })}
-                </div>
-
-                <h4>Type</h4>
-                { pokemon.types.map((type) => {
-                    return (
-                        <p>{type.type.name}</p>
-                    );
-                })}
-
-                <div className="stats">
-                    <h4>Stats</h4>
-                    { pokemon.stats.map((stat) => {
-                        return (
-                            <>
-                                <p>{stat.stat.name}</p>
-                                <p>{stat.base_stat}</p>
-                            </>
-                        );
-                    })}
-                </div>
-            </>}
+            { pokemon && <Card sx={{ display: 'flex' }}>
+                <CardMedia
+                    component="img"
+                    alt={pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
+                    sx={{ height: 200, width: 200 }}
+                    image={pokemon.sprites.other?.home.front_default ? pokemon.sprites.other?.home.front_default : ""}
+                />
+                <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="div">
+                            {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
+                            <span> #{ pokemon.id }</span>
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary">
+                            <List>
+                                <ListItem>Species: {pokemon.species.name.charAt(0).toUpperCase() + pokemon.species.name.slice(1)}</ListItem>
+                                <ListItem>Experience: {pokemon.base_experience}</ListItem>
+                                <ListItem>Height: {pokemon.height} decimetres</ListItem>
+                                <ListItem>Weight: {pokemon.weight} hectograms</ListItem>
+                                <ListItem>Type: { pokemon.types.map((type) => {
+                                        return (
+                                            <Chip label={type.type.name} variant="outlined"/>
+                                        );
+                                    })}
+                                </ListItem>
+                                <ListItem>Abilities: { pokemon.abilities.map((ability) => {
+                                        return (
+                                            <Chip label={ability.ability.name} variant="outlined"/>
+                                        );
+                                    })}
+                                </ListItem>
+                            </List>
+                        </Typography>
+                    </CardContent>
+                </Box>
+                <Typography variant="body2" color="text.secondary">
+                            <h4>Stats</h4>
+                            { pokemon.stats.map((stat) => {
+                                return (
+                                    <ScaledBar
+                                        name={stat.stat.name}
+                                        value={stat.base_stat}
+                                    />
+                                );
+                            })}
+                        </Typography>
+            </Card>}
         </> 
     );
 };
 
-const mapStateToProps = (state: any) => {
-    const {
-        poke: { pokemon }
-    } = state;
-
-    return {
-        pokemon
-    };
-};
-
-const mapDispatchToProps = (dispatch: any) => {
-    return {
-        getPokemon: bindActionCreators(getPokemonAction, dispatch)
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(PokemonDetail);
+export default PokemonDetail;

@@ -12,7 +12,7 @@ import { AppBarStyles, ContainerStyles, MainPageStyles, SearchBarStyles, Toolbar
 import PokemonDetail from "./PokemonDetail";
 const logoUrl = require(`../../images/pokedex-logo.png`);
 
-interface PokemonMainProps extends RouteComponentProps {
+export interface PokemonMainProps extends RouteComponentProps {
     getPokemon: typeof getPokemonAction;
     pokemonData: Pokemon[];
     resetPokemonData: typeof resetPokemonDataAction;
@@ -109,7 +109,7 @@ const PokemonMain = ({
 
     return (
         <Container className="pokemon-main" maxWidth="lg" style={ContainerStyles}>
-            <AppBar className="pokemon-main__search" style={AppBarStyles} position="static">
+            <AppBar style={AppBarStyles} position="static">
                 <Toolbar style={ToolbarStyles}>
                     <img alt="Pokédex Logo" height={"56px"} src={logoUrl} />
                 </Toolbar>
@@ -119,7 +119,7 @@ const PokemonMain = ({
                     { pokemonData && <div className="pokemon-list">
                         <Stack direction="row" spacing={1} style={SearchBarStyles}>
                             <TextField 
-                                className="pokemon-main__search-input" 
+                                className="pokemon-main__search-input"
                                 label="Enter Pokémon Name or ID" 
                                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => { setPokemonInput(event.target.value); }}
                                 onKeyPress={(ev) => {
@@ -132,7 +132,7 @@ const PokemonMain = ({
                                 type="search"
                                 value={pokemonInput && pokemonInput.length > 0 ? pokemonInput : ''}
                             />
-                            <Button onClick={() => {searchForPokemon()}} size="medium" variant="contained">Search</Button>
+                            <Button className="pokemon-main__search-button"  onClick={() => {searchForPokemon()}} size="medium" variant="contained">Search</Button>
                         </Stack>
                         <Grid className="pokemon-list__cards" container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                             { pokemonData.sort((a, b) => a.id - b.id).map((pokemon: Pokemon, i: number) => {

@@ -1,7 +1,7 @@
-import { NamedAPIResourceList, Pokemon } from "pokenode-ts"
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
+import { Pokemon } from "pokenode-ts"
+import { call, put, takeEvery } from 'redux-saga/effects'
 import { GetPokemonReturnType, storePokemonDataAction } from "../actions/pokeActions";
-import { getPokemonListRequest, getPokemonRequest } from "../api/pokeApi"
+import { getPokemonRequest } from "../api/pokeApi"
 import { pokeActionTypes } from "../constants/pokeActionTypes";
 
 export function* getPokemonSaga(action: GetPokemonReturnType) {

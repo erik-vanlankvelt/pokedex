@@ -1,7 +1,12 @@
 import { pokeActionTypes } from '../constants/pokeActionTypes';
 import { PokeReducerActions } from '../actions/pokeActions';
+import { Pokemon } from 'pokenode-ts';
 
-const reducer = (state = { pokemonData: [] }, action: PokeReducerActions) => {
+export const pokeInitialState = {
+    pokemonData: [] as Pokemon[]
+};
+
+const reducer = (state = pokeInitialState, action: PokeReducerActions) => {
     switch (action.type) {
         case pokeActionTypes.RESET_POKEMON_DATA:
             return {

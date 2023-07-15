@@ -1,30 +1,48 @@
-import { Avatar, Card, CardHeader } from "@mui/material";
+import { Avatar, Card, CardContent, CardHeader, Theme } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import { RouteComponentProps } from "@reach/router";
 import { Pokemon } from "pokenode-ts";
+import { capitalizeFirstLetter } from "../../global/helperMethods";
 
 interface PokemonCardProps extends RouteComponentProps {
     onClick: () => void;
     pokemon: Pokemon;
 };
 
+const useStyles = makeStyles((theme: Theme) => ({
+    avatar: {
+        width: 60,
+        height: 60,
+        margin: "auto"
+    },
+    card: {
+        textAlign: "center"
+    },
+    heading: {
+      fontSize: 18,
+      fontWeight: "bold",
+      letterSpacing: "0.5px",
+      marginTop: 8,
+      marginBottom: 0
+    },
+    subheader: {
+      fontSize: 14
+    }
+  }));
+
 const PokemonCard = ({
     onClick,
     pokemon,
  }: PokemonCardProps)  => {
+    const styles = useStyles();
 
     return (
-        <Card className="pokemon-card" onClick={onClick}>
-            { pokemon && <>
-                <CardHeader 
-                    avatar={
-                        <Avatar alt={ pokemon.name } sx={{ width: 56, height: 56 }}>
-                            <img alt={ pokemon.name } src={ pokemon.sprites.front_default ? pokemon.sprites.front_default : "" } />
-                        </Avatar>
-                    }
-                    title={ pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1) }
-                    subheader={`#${ pokemon.id }`}
-                />
-            </>}
+        <Card className={styles.card} onClick={onClick} aria-label="view pokemon details">
+            <CardContent>
+                <Avatar alt={ pokemon.name } className={styles.avatar} src={ pokemon.sprites.front_default ? pokemon.sprites.front_default : "" } />
+                <h3 className={styles.heading}>{capitalizeFirstLetter(pokemon.name)}</h3>
+                <span className={styles.subheader}>{`#${ pokemon.id }`}</span>
+            </CardContent>
         </Card> 
     );
 };

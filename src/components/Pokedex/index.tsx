@@ -108,14 +108,14 @@ const PokemonMain = ({
     };
 
     return (
-        <Container className="pokemon-main" maxWidth="md" style={ContainerStyles}>
+        <Container className="pokemon-main" maxWidth="lg" style={ContainerStyles}>
             <AppBar className="pokemon-main__search" style={AppBarStyles} position="static">
                 <Toolbar style={ToolbarStyles}>
                     <img alt="Pokédex Logo" height={"56px"} src={logoUrl} />
                 </Toolbar>
             </AppBar>
             <Grid container spacing={3} style={MainPageStyles}>
-                <Grid item xs={9}>
+                <Grid item xs={5}>
                     { pokemonData && <div className="pokemon-list">
                         <Stack direction="row" spacing={1} style={SearchBarStyles}>
                             <TextField 
@@ -132,9 +132,8 @@ const PokemonMain = ({
                                 type="search"
                                 value={pokemonInput && pokemonInput.length > 0 ? pokemonInput : ''}
                             />
-                            <Button onClick={() => { searchForPokemon() }} size="medium" variant="contained">Search</Button>
+                            <Button onClick={() => {searchForPokemon()}} size="medium" variant="contained">Search</Button>
                         </Stack>
-                        { displayPokemonDetails && pokemonDetails && <PokemonDetail pokemon={pokemonDetails} />}
                         <Grid className="pokemon-list__cards" container spacing={{ xs: 2, md: 3 }} columns={{ xs: 4, sm: 8, md: 12 }}>
                             { pokemonData.sort((a, b) => a.id - b.id).map((pokemon: Pokemon, i: number) => {
                                 return (
@@ -150,9 +149,9 @@ const PokemonMain = ({
                         </Grid>
                     </div>}
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={2}>
+                    <h3 className="pokemon-search-history__heading">Search History</h3>
                     { searchHistory && searchHistory.length > 0 && <div className="pokemon-search-history">
-                        <h3 className="pokemon-search-history__heading">Search History</h3>
                         <Stack direction="column-reverse" spacing={1}>
                             { searchHistory.map((searchItem: string) => {
                                 return (
@@ -163,11 +162,15 @@ const PokemonMain = ({
                                         key={searchItem}
                                         label={searchItem}
                                         onClick={(event: React.MouseEvent<HTMLElement>) => selectPreviousSearch(event)}
+                                        aria-label="use search history"
                                     />
                                 )
                             })}
                         </Stack>
                     </div>}
+                </Grid>
+                <Grid item xs={5}>
+                    { displayPokemonDetails && pokemonDetails && <PokemonDetail pokemon={pokemonDetails} />}
                 </Grid>
             </Grid>
         </Container> 

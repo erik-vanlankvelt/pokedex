@@ -4,6 +4,14 @@ export const AppBarStyles: CSSProperties = {
     background: '#e3350d'
 }
 
+export const CardDetailsStyles: CSSProperties = {
+    marginBottom: '20px'
+}
+
+export const CloseButtonStyles: CSSProperties = {
+    float: 'right'
+}
+
 export const ContainerStyles: CSSProperties = {
     background: '#f2f2f2',
     transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',

@@ -91,4 +91,26 @@ npm run test
 
 ## Additional Changes
 
-The following are some additional changes that I would make.
+The following are some additional changes that I would make:
+
+1. Move the saved search history from Local Storage to Cookies. It would not be a good user experience to have to manually open dev tools and clear Local Storage.
+
+2. Run the linting and tests as part of a CI/CD pipeline.
+
+3. Add a loading state to display to the user during asynchronous processes.
+
+4. Add alerts to display to the user when errors occur.
+
+5. Add additional routing for more views.
+
+6. Utilize more of the API endpoints, add to api, reducers, sagas, etc.
+
+7. Not sure if I would use Material UI in a final project. I did for this exercise as I was able to quickly create a UI out of the box.
+
+8. In a concurrent environment, I would most likely set params per environment via Docker and K8s.
+
+9. Write more tests!
+
+10. Add caching. Might even pre-fetch data prior to display, like for the Pokemon details.
+
+11. Display a placeholder preview of content before the data gets loaded.

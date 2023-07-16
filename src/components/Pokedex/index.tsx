@@ -8,13 +8,6 @@ import PokemonCard from './PokemonCard';
 import { AppBar, Button, Chip, Container, Grid, Stack, TextField, Toolbar } from '@mui/material';
 import { POKE_API_BASE } from '../../api/pokeApi';
 import axios from 'axios';
-import {
-    AppBarStyles,
-    ContainerStyles,
-    MainPageStyles,
-    SearchBarStyles,
-    ToolbarStyles
-} from '../../constants/pokeStyles';
 import PokemonDetail from './PokemonDetail';
 const logoUrl = require(`../../images/pokedex-logo.png`);
 
@@ -41,6 +34,7 @@ const PokemonMain = ({ getPokemon, pokemonData, resetPokemonData }: PokemonMainP
         if (storedSearchHistory !== null) {
             setSearchHistory(JSON.parse(storedSearchHistory));
         }
+        // Let's get some to display on the page by default
         getDefaultPokemonData(abortController.signal);
 
         return () => abortController.abort();
@@ -59,6 +53,7 @@ const PokemonMain = ({ getPokemon, pokemonData, resetPokemonData }: PokemonMainP
     };
 
     const getDefaultPokemonData = async (signal?: AbortSignal) => {
+        // TODO invoke some sort of loading action
         resetPokemonData();
         setDisplayPokemonDetails(false);
 
@@ -68,7 +63,8 @@ const PokemonMain = ({ getPokemon, pokemonData, resetPokemonData }: PokemonMainP
 
             getPokemonDataWithResources(pokemonResourceList.results);
         } catch (error) {
-            console.error('Error getting Pokemon Resource List', error);
+            console.error('Error trying to get Pokemon Resource List', error);
+            // TODO invoke hide loading action
             // TODO display error message/state
         }
     };
@@ -80,6 +76,7 @@ const PokemonMain = ({ getPokemon, pokemonData, resetPokemonData }: PokemonMainP
     };
 
     const searchForPokemon = (input?: string) => {
+        // TODO invoke some sort of loading action
         resetPokemonData();
         setDisplayPokemonDetails(false);
 
@@ -110,17 +107,28 @@ const PokemonMain = ({ getPokemon, pokemonData, resetPokemonData }: PokemonMainP
     };
 
     return (
-        <Container className='pokemon-main' maxWidth='lg' style={ContainerStyles}>
-            <AppBar style={AppBarStyles} position='static'>
-                <Toolbar style={ToolbarStyles}>
+        <Container
+            className='pokemon-main'
+            maxWidth='lg'
+            sx={{
+                background: '#f2f2f2',
+                transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+                borderRadius: `0 0 8px 8px`,
+                boxShadow: `0px 4px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)`,
+                padding: `0 0 30px 0`,
+                marginBottom: '40px'
+            }}
+        >
+            <AppBar position='static' sx={{ background: '#e3350d' }}>
+                <Toolbar sx={{ padding: '15px' }}>
                     <img alt='Pokédex Logo' height={'56px'} src={logoUrl} />
                 </Toolbar>
             </AppBar>
-            <Grid container spacing={3} style={MainPageStyles}>
+            <Grid container spacing={3} sx={{ padding: '20px' }}>
                 <Grid item xs={5}>
                     {pokemonData && (
                         <div className='pokemon-list'>
-                            <Stack direction='row' spacing={1} style={SearchBarStyles}>
+                            <Stack direction='row' spacing={1} sx={{ marginBottom: '20px' }}>
                                 <TextField
                                     className='pokemon-main__search-input'
                                     label='Enter Pokémon Name or ID'
@@ -167,6 +175,11 @@ const PokemonMain = ({ getPokemon, pokemonData, resetPokemonData }: PokemonMainP
                                             </Grid>
                                         );
                                     })}
+                                {pokemonData.length < 1 && (
+                                    <Grid item>
+                                        <p>No results found...</p>
+                                    </Grid>
+                                )}
                             </Grid>
                         </div>
                     )}
@@ -187,7 +200,7 @@ const PokemonMain = ({ getPokemon, pokemonData, resetPokemonData }: PokemonMainP
                                             onClick={(event: React.MouseEvent<HTMLElement>) =>
                                                 selectPreviousSearch(event)
                                             }
-                                            aria-label='use search history'
+                                            aria-label='view search history'
                                             className='pokemon-search-history__item'
                                         />
                                     );

@@ -1,5 +1,4 @@
-import { Action } from 'redux';
-import { runSaga, Saga } from 'redux-saga';
+import { runSaga } from 'redux-saga';
 import { AppState } from '../constants/globalTypes';
 import { pokeInitialState } from '../reducers/pokeReducers';
 

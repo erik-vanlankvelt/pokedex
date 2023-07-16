@@ -1,4 +1,4 @@
-import { NamedAPIResourceList, Pokemon } from 'pokenode-ts';
+import { Pokemon } from 'pokenode-ts';
 import { pokeActionTypes } from '../constants/pokeActionTypes';
 
 export const getPokemonAction = (idOrName: number | string) => {

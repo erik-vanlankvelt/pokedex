@@ -1,4 +1,3 @@
-// TODO update redux with @reduxjs/toolkit
 import { combineReducers } from 'redux';
 
 import poke from '../reducers/pokeReducers';

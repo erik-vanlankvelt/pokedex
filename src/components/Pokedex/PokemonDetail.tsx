@@ -3,7 +3,6 @@ import { Pokemon } from 'pokenode-ts';
 import { Box, Card, CardContent, CardMedia, Chip, List, ListItem, Paper, Typography } from '@mui/material';
 import ScaledBar from '../common/ScaledBar';
 import { capitalizeAllWords, capitalizeFirstLetter, humanizeText } from '../../global/helperMethods';
-import { CardDetailsStyles } from '../../constants/pokeStyles';
 
 export interface PokemonDetailProps extends RouteComponentProps {
     pokemon: Pokemon;
@@ -11,7 +10,7 @@ export interface PokemonDetailProps extends RouteComponentProps {
 
 const PokemonDetail = ({ pokemon }: PokemonDetailProps) => {
     return (
-        <Card className='pokemon-detail' style={CardDetailsStyles}>
+        <Card className='pokemon-detail'>
             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                 <CardMedia
                     component='img'
@@ -31,10 +30,12 @@ const PokemonDetail = ({ pokemon }: PokemonDetailProps) => {
                         </Typography>
                         <Typography variant='body2' color='text.secondary'>
                             <List>
-                                <ListItem>Species: {capitalizeFirstLetter(pokemon.species.name)}</ListItem>
-                                <ListItem>Experience: {pokemon.base_experience}</ListItem>
-                                <ListItem>Height: {pokemon.height} decimetres</ListItem>
-                                <ListItem>Weight: {pokemon.weight} hectograms</ListItem>
+                                <ListItem key='species'>
+                                    Species: {capitalizeFirstLetter(pokemon.species.name)}
+                                </ListItem>
+                                <ListItem key='experience'>Experience: {pokemon.base_experience}</ListItem>
+                                <ListItem key='height'>Height: {pokemon.height} decimetres</ListItem>
+                                <ListItem key='weight'>Weight: {pokemon.weight} hectograms</ListItem>
                             </List>
                         </Typography>
                     </CardContent>
@@ -45,16 +46,30 @@ const PokemonDetail = ({ pokemon }: PokemonDetailProps) => {
                     <Typography variant='body2' color='text.secondary'>
                         <Paper sx={{ mb: 2, bgcolor: '#f2f2f2' }}>
                             <List>
-                                <ListItem>
+                                <ListItem key='type'>
                                     Type:{' '}
                                     {pokemon.types.map((type) => {
-                                        return <Chip label={type.type.name} sx={{ m: 0.3 }} variant='outlined' />;
+                                        return (
+                                            <Chip
+                                                key={type.type.name}
+                                                label={type.type.name}
+                                                sx={{ m: 0.3 }}
+                                                variant='outlined'
+                                            />
+                                        );
                                     })}
                                 </ListItem>
-                                <ListItem>
+                                <ListItem key='abilities'>
                                     Abilities:{' '}
                                     {pokemon.abilities.map((ability) => {
-                                        return <Chip label={ability.ability.name} sx={{ m: 0.3 }} variant='outlined' />;
+                                        return (
+                                            <Chip
+                                                key={ability.ability.name}
+                                                label={ability.ability.name}
+                                                sx={{ m: 0.3 }}
+                                                variant='outlined'
+                                            />
+                                        );
                                     })}
                                 </ListItem>
                             </List>

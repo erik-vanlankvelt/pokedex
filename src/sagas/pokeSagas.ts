@@ -5,8 +5,6 @@ import { getPokemonRequest } from '../api/pokeApi';
 import { pokeActionTypes } from '../constants/pokeActionTypes';
 
 export function* getPokemonSaga(action: GetPokemonReturnType) {
-    // TODO invoke some sort of loading action
-
     try {
         const { idOrName } = action;
         const pokemon: Pokemon = yield call(getPokemonRequest, idOrName);

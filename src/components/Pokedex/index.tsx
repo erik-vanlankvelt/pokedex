@@ -163,6 +163,7 @@ const PokemonMain = ({
                                         label={searchItem}
                                         onClick={(event: React.MouseEvent<HTMLElement>) => selectPreviousSearch(event)}
                                         aria-label="use search history"
+                                        className="pokemon-search-history__item"
                                     />
                                 )
                             })}

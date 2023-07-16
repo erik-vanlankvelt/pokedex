@@ -12,7 +12,9 @@ const props: PokemonMainProps = {
   getPokemon: jest.fn(),
   pokemonData: [],
   resetPokemonData: jest.fn()
-}
+};
+
+const defaultSearchValue: string = '1';
 
 const setup = () => {
   const { container } = render(
@@ -28,6 +30,11 @@ const setup = () => {
     searchButton,
     searchInput
   }
+};
+
+const fireSearch = (searchButton: Element, searchInput: Element) => {
+  fireEvent.change(searchInput!, {target: {value: defaultSearchValue }});
+  fireEvent.click(searchButton!);
 }
 
 describe('<PokemonMain />', () => {
@@ -59,12 +66,62 @@ describe('<PokemonMain />', () => {
 
   it ('should be able to search for any Pokemon', () => {
     const {container, searchButton, searchInput} = setup();
-    console.log('searchInput', searchInput);
 
-    fireEvent.change(searchInput!, {target: {value: '1'}});
-    fireEvent.click(searchButton!);
+    fireSearch(searchButton!, searchInput!);
+
+    setTimeout(() => {
+      const pokemonCards = container.querySelectorAll('.pokemon-card');
+      
+      expect(props.resetPokemonData).toHaveBeenCalled();
+      expect(props.getPokemon).toHaveBeenCalled();
+      expect(pokemonCards).toBeInTheDocument();
+      expect(pokemonCards.length).toBeGreaterThan(0);
+    });
+  });
+});
+
+it ('should see a history of what has been searched', () => {
+  const {container, searchButton, searchInput} = setup();
+
+  fireSearch(searchButton!, searchInput!);
+
+  setTimeout(() => {
+    const searchHistory = container.querySelector('.pokemon-search-history');
+    const searchHistoryItems = container.querySelectorAll('.pokemon-search-history__item');
     
+    expect(searchHistory).toBeInTheDocument();
+    expect(searchHistoryItems).toBeInTheDocument();
+    expect(searchHistoryItems.length).toBeGreaterThan(0);
+  });
+});
+
+it ('should be able to revisit search history', () => {
+  const {container, searchButton, searchInput} = setup();
+
+  fireSearch(searchButton!, searchInput!);
+
+  setTimeout(() => {
+    const pokemonCards = container.querySelectorAll('.pokemon-card');
+    const searchHistoryItems = container.querySelectorAll('.pokemon-search-history__item');
+    
+    fireEvent.click(searchHistoryItems[0]);
+
     expect(props.resetPokemonData).toHaveBeenCalled();
     expect(props.getPokemon).toHaveBeenCalled();
+    expect(searchInput).toHaveValue(defaultSearchValue);
+    expect(pokemonCards.length).toBeGreaterThan(0);
+  });
+});
+
+it ('should display Pokemon details when card is selected', () => {
+  const {container} = setup();
+  const pokemonCards = container.querySelectorAll('.pokemon-card');
+
+  setTimeout(() => {
+    fireEvent.click(pokemonCards[0]);
+    
+    const pokemonDetails = container.querySelectorAll('.pokemon-details');
+
+    expect(pokemonDetails).toBeInTheDocument();
   });
 });

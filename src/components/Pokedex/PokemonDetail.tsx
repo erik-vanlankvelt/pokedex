@@ -5,7 +5,7 @@ import ScaledBar from "../common/ScaledBar";
 import { capitalizeAllWords, capitalizeFirstLetter, humanizeText } from "../../global/helperMethods";
 import { CardDetailsStyles } from "../../constants/pokeStyles";
 
-interface PokemonDetailProps extends RouteComponentProps {
+export interface PokemonDetailProps extends RouteComponentProps {
     pokemon: Pokemon;
 };
 
@@ -14,7 +14,7 @@ const PokemonDetail = ({
 }: PokemonDetailProps)  => {
 
     return (
-        <Card style={CardDetailsStyles}>            
+        <Card className="pokemon-detail" style={CardDetailsStyles}>            
             <Box sx={{ display: 'flex', flexDirection: 'row' }}>
                 <CardMedia
                     component="img"

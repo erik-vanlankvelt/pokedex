@@ -11,9 +11,7 @@ describe('getPokemonSaga', () => {
         const triggerAction = getPokemonAction(idOrName);
         const dispatched = await recordSaga(getPokemonSaga, triggerAction);
 
-        const expectedActions = [
-            storePokemonDataAction(mockPokemon)
-        ];
+        const expectedActions = [storePokemonDataAction(mockPokemon)];
 
         expect(pokeApi.getPokemonRequest).toHaveBeenCalledWith(idOrName);
         expect(dispatched).toEqual(expectedActions);

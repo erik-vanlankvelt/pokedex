@@ -1,9 +1,7 @@
 import createSagaMiddleware from '@redux-saga/core';
 import reducer from './rootReducer';
 
-import {
-    watchGetPokemon
-} from '../sagas/pokeSagas';
+import { watchGetPokemon } from '../sagas/pokeSagas';
 import { composeWithDevTools } from 'redux-devtools-extension';
 // TODO update redux with @reduxjs/toolkit
 import { applyMiddleware, createStore } from 'redux';

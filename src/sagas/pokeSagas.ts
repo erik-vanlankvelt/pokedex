@@ -1,8 +1,8 @@
-import { Pokemon } from "pokenode-ts"
-import { call, put, takeEvery } from 'redux-saga/effects'
-import { GetPokemonReturnType, storePokemonDataAction } from "../actions/pokeActions";
-import { getPokemonRequest } from "../api/pokeApi"
-import { pokeActionTypes } from "../constants/pokeActionTypes";
+import { Pokemon } from 'pokenode-ts';
+import { call, put, takeEvery } from 'redux-saga/effects';
+import { GetPokemonReturnType, storePokemonDataAction } from '../actions/pokeActions';
+import { getPokemonRequest } from '../api/pokeApi';
+import { pokeActionTypes } from '../constants/pokeActionTypes';
 
 export function* getPokemonSaga(action: GetPokemonReturnType) {
     // TODO invoke some sort of loading action

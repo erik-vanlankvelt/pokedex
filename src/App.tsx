@@ -7,13 +7,13 @@ import { store } from './global/sagaStore';
 const PokemonMain = lazy(() => import('./components/Pokedex'));
 
 function App() {
-  return (
-    <Provider store={store}>
-      <Router basepath='/'>
-        <PokemonMain default />
-      </Router>
-    </Provider>
-  );
+    return (
+        <Provider store={store}>
+            <Router basepath='/'>
+                <PokemonMain default />
+            </Router>
+        </Provider>
+    );
 }
 
 export default App;
